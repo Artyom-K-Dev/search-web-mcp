@@ -11,6 +11,28 @@ A Model Context Protocol (MCP) server that provides web search capabilities usin
 
 ### Docker (Recommended)
 
+Add this to your `mcp.json` (requires a running SearXNG instance):
+
+```json
+{
+  "mcpServers": {
+    "search-web": {
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "-e", "SEARXNG_API_URL=http://host.docker.internal:8080",
+        "--add-host=host.docker.internal:host-gateway",
+        "ghcr.io/artyom-k-dev/search-web-mcp:latest"
+      ]
+    }
+  }
+}
+```
+
+Or run manually:
+
 ```bash
 docker run -i --rm \
   -e SEARXNG_API_URL=http://host.docker.internal:8080 \
