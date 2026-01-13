@@ -1,68 +1,44 @@
-# WebSearch MCP Server
+# Search Web MCP Server
 
-A Model Context Protocol (MCP) server written in Rust that allows AI agents to search the web using a private SearXNG instance.
+A Model Context Protocol (MCP) server that provides web search capabilities using a SearXNG instance.
 
 ## Features
 
-*   **Privacy-focused**: Uses a self-hosted SearXNG instance.
-*   **Simple API**: Exposes a single `search` tool.
-
-## Installation & Configuration
-
-### Prerequisites
-*   Rust toolchain installed.
-*   Docker & Docker Compose (for running the SearXNG instance).
-
-### Build
-```bash
-cargo build --release
-```
-
-### Start SearXNG
-This server requires a running SearXNG instance. A `docker-compose.yml` is provided.
-
-```bash
-docker-compose up -d
-```
-*Note: Ensure port 8080 is available.*
-
-### Configuration (Cursor)
-Add the server to your `.cursor/mcp.json` (project specific) or your global MCP settings.
-
-**Copy-pasteable entry:**
-
-```json
-{
-  "mcpServers": {
-    "websearch-mcp": {
-      "command": "/workspaces/MachineLearning/WebSearchMCP/target/release/websearch-mcp",
-      "args": []
-    }
-  }
-}
-```
+- **Web Search**: Perform privacy-respecting web searches via SearXNG
+- **Snippet Extraction**: Returns titles, URLs, and text snippets from search results
 
 ## Usage
 
-The server exposes a single tool: `search`.
+### Docker (Recommended)
 
-### Tool: `search`
+```bash
+docker run -i --rm \
+  -e SEARXNG_API_URL=http://host.docker.internal:8080 \
+  --add-host=host.docker.internal:host-gateway \
+  ghcr.io/artyom-k-dev/search-web-mcp:latest
+```
 
-**Arguments:**
-*   `query`: String. The search query.
+### Local Development
 
-**Example:**
-*   Query: `rust programming language`
-*   Input: `{"query": "rust programming language"}`
+1. Ensure you have a running SearXNG instance (e.g., via Docker):
+   ```bash
+   docker-compose up -d
+   ```
 
-## Development
+2. Run the server:
+   ```bash
+   export SEARXNG_API_URL=http://localhost:8080
+   cargo run --release
+   ```
 
-1.  **Start backend**: `docker-compose up -d`
-2.  **Run server**:
-    ```bash
-    cargo run
-    ```
+## Tools Available
 
-## License
+- `search`: Search the web using SearXNG.
+  - Arguments:
+    - `query`: The search query string
 
-MIT
+## Configuration
+
+| Environment Variable | Description | Default |
+|----------------------|-------------|---------|
+| `SEARXNG_API_URL` | Base URL of the SearXNG instance | `http://localhost:8080` |
